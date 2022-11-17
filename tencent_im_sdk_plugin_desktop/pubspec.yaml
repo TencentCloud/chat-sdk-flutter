@@ -1,0 +1,84 @@
+name: tencent_im_sdk_plugin_desktop
+description: tencent im for flutter desktop.
+version: 0.0.6
+homepage: https://cloud.tencent.com/product/im
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # tencent_im_sdk_plugin_platform_interface: ^0.3.6
+  tencent_im_sdk_plugin_platform_interface:
+    path: ../tencent_im_sdk_plugin_platform_interface
+  path: ^1.8.1
+  ffi: ^1.2.1
+  system_info2: ^2.0.4
+  shell: ^2.0.0
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  ffigen: ^4.1.3
+  
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+false_secrets:
+  - assets/
+flutter:
+  assets:
+    - assets/
+  plugin:
+    implements: tencent_im_sdk_plugin
+    platforms:
+      macos:
+        dartPluginClass: TencentImSDKPluginDesktop
+        fileName: tencent_im_sdk_plugin_desktop.dart
+      windows:
+        dartPluginClass: TencentImSDKPluginDesktop
+        fileName: tencent_im_sdk_plugin_desktop.dart
+ffigen:
+  name: NativeBindings
+  description: Bindings to 'lib/c/TIMCloud.h' create flutter for macOS.
+  output: 'lib/utils/generated_bindings_wrap.dart'
+  headers:
+    entry-points:
+      - 'lib/c/library.h'
+  functions:
+    expose-typedefs:
+      include:
+        - '.*'
+  # To add assets to your package, add an assets section, like this:
+  
+  #   - images/a_dot_ham.jpeg
+  #
+  # For details regarding assets in packages, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  #
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # To add custom fonts to your package, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts in packages, see
+  # https://flutter.dev/custom-fonts/#from-packages

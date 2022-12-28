@@ -1,5 +1,4 @@
-
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 
 /// V2TIMTopicInfoResult
 ///
@@ -10,7 +9,6 @@ class V2TimTopicInfoResult {
   String? errorMessage;
   V2TimTopicInfo? topicInfo;
 
-
   V2TimTopicInfoResult({
     this.errorCode,
     this.errorMessage,
@@ -20,7 +18,7 @@ class V2TimTopicInfoResult {
   V2TimTopicInfoResult.fromJson(Map<String, dynamic> json) {
     errorCode = json['errorCode'];
     errorMessage = json['errorMessage'];
-    if(json['topicInfo']!=null){
+    if (json['topicInfo'] != null) {
       topicInfo = V2TimTopicInfo.fromJson(json['topicInfo']);
     }
   }

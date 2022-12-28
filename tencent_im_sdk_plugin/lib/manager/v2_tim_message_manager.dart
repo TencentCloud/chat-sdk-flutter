@@ -2,24 +2,25 @@
 
 import 'dart:collection';
 import 'dart:convert';
+// ignore: unnecessary_import
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimAdvancedMsgListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/history_msg_get_type_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/image_types.dart';
-import 'package:tencent_im_sdk_plugin/enum/message_elem_type.dart';
-import 'package:tencent_im_sdk_plugin/enum/message_priority_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/offlinePushInfo.dart';
-import 'package:tencent_im_sdk_plugin/enum/receive_message_opt_enum.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message_change_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message_online_url.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message_search_param.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message_search_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_receive_message_opt_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimAdvancedMsgListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/history_msg_get_type_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/message_elem_type.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/message_priority_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/offlinePushInfo.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/receive_message_opt_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_change_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_list_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_online_url.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_param.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_receive_message_opt_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_value_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/get_group_message_read_member_list_filter.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_message_read_member_list.dart';
@@ -225,10 +226,16 @@ class V2TIMMessageManager {
   /// 创建图片消息（图片文件最大支持 28 MB）
   /// - imagePath 图片路径（只有发送方可以获取到）
   /// - inputElement 用于选择图片的 DOM 节点(web端必填)
-  Future<V2TimValueCallback<V2TimMsgCreateInfoResult>> createImageMessage(
-      {required String imagePath, dynamic inputElement}) async {
-    return ImFlutterPlatform.instance
-        .createImageMessage(imagePath: imagePath, inputElement: inputElement);
+  Future<V2TimValueCallback<V2TimMsgCreateInfoResult>> createImageMessage({
+    required String imagePath,
+    dynamic inputElement,
+    String? imageName,
+  }) async {
+    return ImFlutterPlatform.instance.createImageMessage(
+      imagePath: imagePath,
+      inputElement: inputElement,
+      imageName: imageName,
+    );
   }
 
   /// 创建音频文件
@@ -985,6 +992,42 @@ class V2TIMMessageManager {
     List<int>? messageTypeList,
   }) async {
     return ImFlutterPlatform.instance.getHistoryMessageList(
+      getType: getType!.index,
+      userID: userID,
+      count: count,
+      lastMsgID: lastMsgID,
+      groupID: groupID,
+      lastMsgSeq: lastMsgSeq,
+      messageTypeList: messageTypeList ?? [],
+    );
+  }
+
+  /// 获取历史消息高级接口
+  ///
+  /// 参数
+  ///```
+  /// getType 拉取消息类型，可以设置拉取本地、云端更老或者更新的消息（具体类型在HistoryMessageGetType类中）
+  /// lastMsg/lastMsgSeq 用来表示拉取时的起点，第一次拉取时可以不填或者填 0；
+  ///```
+  ///
+  /// 请注意：
+  /// 如果设置为拉取云端消息，当 SDK 检测到没有网络，默认会直接返回本地数据
+  /// 只有会议群（Meeting）才能拉取到进群前的历史消息，直播群（AVChatRoom）消息不存漫游和本地数据库，调用这个接口无效
+  ///
+  ///web 端使用该接口，消息都是从远端拉取，不支持lastMsgSeq
+  ///
+  ///
+  Future<V2TimValueCallback<V2TimMessageListResult>> getHistoryMessageListV2({
+    HistoryMsgGetTypeEnum? getType =
+        HistoryMsgGetTypeEnum.V2TIM_GET_LOCAL_OLDER_MSG,
+    String? userID,
+    String? groupID,
+    int lastMsgSeq = -1,
+    required int count,
+    String? lastMsgID,
+    List<int>? messageTypeList,
+  }) async {
+    return ImFlutterPlatform.instance.getHistoryMessageListV2(
       getType: getType!.index,
       userID: userID,
       count: count,

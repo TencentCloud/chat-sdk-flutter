@@ -15,7 +15,7 @@ import 'package:tencent_im_sdk_plugin_platform_interface/enum/get_group_message_
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/history_message_get_type.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/message_elem_type.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/offlinePushInfo.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversationList_filter.dart';

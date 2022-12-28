@@ -1,16 +1,13 @@
 // ignore_for_file: unused_import, library_prefixes, prefer_typing_uninitialized_variables, duplicate_ignore
 
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:js';
-import 'dart:typed_data';
 import 'package:path/path.dart' as Path;
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimAdvancedMsgListener.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSignalingListener.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/get_group_message_read_member_list_filter.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/message_elem_type.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/v2_signaling_action_type.dart';
@@ -18,6 +15,7 @@ import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_message_read_member_list.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_change_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_list_result.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_receipt.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_result.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_receive_message_opt_info.dart';
@@ -106,7 +104,7 @@ class V2TIMMessageManager {
       case "image":
         {
           messageSimpleElem =
-              CreateMessage.createSimpleImageMessage(params["inputElement"]);
+              await CreateMessage.createSimpleImageMessage(params);
           break;
         }
       case "textAt":
@@ -150,7 +148,7 @@ class V2TIMMessageManager {
         {
           String videoFilePath = params['videoFilePath'] ?? '';
           dynamic file = params['inputElement'];
-          messageSimpleElem = CreateMessage.createSimpleVideoMessage(
+          messageSimpleElem = await CreateMessage.createSimpleVideoMessage(
             videoFilePath,
             file,
           );
@@ -158,7 +156,7 @@ class V2TIMMessageManager {
         }
       case "file":
         {
-          messageSimpleElem = CreateMessage.createSimpleFileMessage(
+          messageSimpleElem = await CreateMessage.createSimpleFileMessage(
               filePath: params['filePath'] ?? '',
               fileName: params['fileName'] ?? "",
               file: params['inputElement']);
@@ -781,10 +779,53 @@ class V2TIMMessageManager {
     // }
   }
 
+  Future<V2TimValueCallback<V2TimMessageListResult>> getMessageListV2(
+      dynamic getMsgListParams) async {
+    // try {
+    final res =
+        await wrappedPromiseToFuture(timeweb!.getMessageList(getMsgListParams));
+    final code = res.code;
+    if (code == 0) {
+      final resMap = jsToMap(res.data);
+      final List messageList = List.from(resMap['messageList']);
+      final bool isCompleted = resMap["isCompleted"];
+      final historyMessageListPromises = messageList.reversed
+          .skipWhile((value) => jsToMap(value)["isDeleted"])
+          .map((element) async {
+        final message = jsToMap(element);
+        if (message['type'] == MsgType.MSG_MERGER) {
+          mergerMsgList.add(element);
+        }
+
+        final responses =
+            await V2TIMMessage.convertMessageFromWebToDart(element);
+        return responses;
+      }).toList();
+      final historyMessageList = await Future.wait(historyMessageListPromises);
+      final res2dart = Map<String, dynamic>.from({});
+      res2dart["isFinished"] = isCompleted;
+      res2dart["messageList"] = historyMessageList;
+      return CommonUtils.returnSuccess<V2TimMessageListResult>(
+        res2dart,
+      );
+    } else {
+      return CommonUtils.returnErrorForValueCb("获取历史消息失败");
+    }
+    // } catch (error) {
+    //   return CommonUtils.returnError(error);
+    // }
+  }
+
   Future<V2TimValueCallback<List<V2TimMessage>>> getC2CHistoryMessageList(
       params) async {
     final getMessageListParams = GetMessageList.formateParams(params);
     return await getMessageList(getMessageListParams);
+  }
+
+  Future<V2TimValueCallback<V2TimMessageListResult>> getC2CHistoryMessageListV2(
+      params) async {
+    final getMessageListParams = GetMessageList.formateParams(params);
+    return await getMessageListV2(getMessageListParams);
   }
 
   Future<V2TimValueCallback<List<V2TimMessage>>> getGroupHistoryMessageList(

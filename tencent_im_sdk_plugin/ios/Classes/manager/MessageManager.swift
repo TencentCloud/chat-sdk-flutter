@@ -13,7 +13,7 @@ class MessageManager {
 	var channel: FlutterMethodChannel
     // 存放创建出的临时消息
     var messageDict =  [String: V2TIMMessage]()
-    
+    var downloadingMessageList:[String] = [];
     // let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
 	init(channel: FlutterMethodChannel) {
@@ -594,24 +594,89 @@ class MessageManager {
 				let lastMsg = msgs!.isEmpty ? nil : msgs![0]
 				if lastMsg != nil {
 					option.lastMsg = lastMsg
-					self.getHistoryMessageListFn(option: option, result: result, call: call)
+					self.getHistoryMessageListFn(option: option, result: result, call: call,isV2: false)
 				}
 			}, fail: TencentImUtils.returnErrorClosures(call: call, result: result));
 		} else {
-			getHistoryMessageListFn(option: option, result: result, call: call)
+			getHistoryMessageListFn(option: option, result: result, call: call,isV2: false)
 		}
 	}
+    func getHistoryMessageListV2(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let lastMsgID = CommonUtils.getParam(call: call, result: result, param: "lastMsgID") as? String
+        let count = CommonUtils.getParam(call: call, result: result, param: "count") as? UInt
+        let userID = CommonUtils.getParam(call: call, result: result, param: "userID") as? String
+        let groupID = CommonUtils.getParam(call: call, result: result, param: "groupID") as? String
+        let getType = CommonUtils.getParam(call: call, result: result, param: "getType") as? Int
+        let lastMsgSeq = CommonUtils.getParam(call: call, result: result, param: "lastMsgSeq") as? Int
+        let messageTypeList = CommonUtils.getParam(call: call, result: result, param: "messageTypeList") as? Array<Int>
+        let option = V2TIMMessageListGetOption();
+        
+        if groupID != nil && userID != nil {
+            CommonUtils.resultFailed(desc: "groupID和userID只能设置一个", code: -1, call: call, result: result)
+        }
+        if count != nil {
+            option.count = count!
+        }
+        if userID != nil {
+            option.userID = userID
+        }
+        if groupID != nil {
+            option.groupID = groupID
+        }
+        if getType != nil {
+            option.getType = V2TIMMessageGetType.init(rawValue: getType!)!
+        }
+        if let lastMsgSeq = lastMsgSeq {
+            if (lastMsgSeq >= 0) {
+                option.lastMsgSeq = UInt(lastMsgSeq)
+            }
+        }
+        if(messageTypeList != nil){
+            option.messageTypeList = messageTypeList?.map({ value in
+                return NSNumber.init(value: value)
+            });
+        }
+        if lastMsgID != nil {
+            V2TIMManager.sharedInstance()?.findMessages(lastMsgID == nil ? [""] : [lastMsgID!], succ: {
+                (msgs) -> Void in
+                let lastMsg = msgs!.isEmpty ? nil : msgs![0]
+                if lastMsg != nil {
+                    option.lastMsg = lastMsg
+                    self.getHistoryMessageListFn(option: option, result: result, call: call,isV2: true)
+                }
+            }, fail: TencentImUtils.returnErrorClosures(call: call, result: result));
+        } else {
+            getHistoryMessageListFn(option: option, result: result, call: call,isV2: true)
+        }
+    }
 
-	func getHistoryMessageListFn(option: V2TIMMessageListGetOption, result: @escaping FlutterResult, call: FlutterMethodCall) {
-		V2TIMManager.sharedInstance()?.getHistoryMessageList(option, succ: {
-			msgs -> Void in
-
-			var messageList: [[String: Any]] = []
-
+    func getHistoryMessageListFn(option: V2TIMMessageListGetOption, result: @escaping FlutterResult, call: FlutterMethodCall,isV2:Bool) {
+        
+        
+        V2TIMManager.sharedInstance()?.getHistoryMessageList(option, succ: {
+            msgs -> Void in
+            
+            
+            
+            var messageList: [[String: Any]] = []
+            
             for i in msgs! {
                 messageList.append(V2MessageEntity.init(message: i).getDict())
             }
-            CommonUtils.resultSuccess(call: call, result: result, data: messageList)
+            if(isV2){
+                var isFinish:Bool = false;
+                
+                if(msgs!.count < option.count){
+                    isFinish = true;
+                }
+                var res:[String:Any] = [:];
+                res["isFinished"] = isFinish;
+                res["messageList"] = messageList;
+                CommonUtils.resultSuccess(call: call, result: result, data: res)
+            }else{
+                CommonUtils.resultSuccess(call: call, result: result, data: messageList)
+            }
+            
 		}, fail: TencentImUtils.returnErrorClosures(call: call, result: result))
 	}
 	
@@ -1165,9 +1230,8 @@ class MessageManager {
                                     }).then({
                                         value in
                                     })
-                    }else if(msg.elemType == V2TIMElemType.ELEM_TYPE_FILE){
-                        res["imageElem"] = V2MessageEntity.init(message: msg).convertFileElem(fileElem: msg.fileElem)
-                        var file:[String:Any] = V2MessageEntity.init(message: msg).convertSoundMessageElem(soundElem: msg.soundElem);
+                    }if(msg.elemType == V2TIMElemType.ELEM_TYPE_FILE){
+                        var file:[String:Any] = V2MessageEntity.init(message: msg).convertFileElem(fileElem:  msg.fileElem);
                         async({
                                         _ -> Int in
                                         
@@ -1193,12 +1257,19 @@ class MessageManager {
         }
 
     }
-    func sendDownloadProgress(_ isFinish:Bool, _ isError:Bool, _ currentSize:Int, _ totalSize:Int,  _ msgID:String,_ type:Int,_ isSnapshot:Bool,_ path:String){
+    func sendDownloadProgress(_ isFinish:Bool, _ isError:Bool, _ currentSize:Int, _ totalSize:Int,  _ msgID:String,_ type:Int,_ isSnapshot:Bool,_ path:String,_ error_code:Int32,_ error_desc:String?){
         let listenerList = SDKManager.getAdvanceMsgListenerList();
+        if(isFinish){
+            let downloadKey = msgID + (isSnapshot ? "_1" : "_0");
+            
+            self.downloadingMessageList.removeAll { item in
+                return item == downloadKey;
+            }
+        }
         for items in listenerList {
             TencentImSDKPlugin.invokeListener(
                 type: ListenerType.onMessageDownloadProgressCallback, method: "advancedMsgListener",
-                data: ["isFinish": isFinish, "isError": isError,"currentSize":currentSize,"totalSize":totalSize,"msgID":msgID,"type":type,"isSnapshot":isSnapshot,"path":path], listenerUuid: items
+                data: ["isFinish": isFinish, "isError": isError,"currentSize":currentSize,"totalSize":totalSize,"msgID":msgID,"type":type,"isSnapshot":isSnapshot,"path":path,"errorCode":error_code,"errorDesc":error_desc ?? ""], listenerUuid: items
             )
         }
     }
@@ -1207,26 +1278,34 @@ class MessageManager {
         let imageType = CommonUtils.changeToIos(type: CommonUtils.getParam(call: call, result: result, param: "imageType") as? Int ?? 0);
         let isSnapshot = CommonUtils.getParam(call: call, result: result, param: "isSnapshot") as? Bool ?? false;
         let allowList:[Int] = [V2TIMElemType.ELEM_TYPE_IMAGE.rawValue,V2TIMElemType.ELEM_TYPE_FILE.rawValue,V2TIMElemType.ELEM_TYPE_SOUND.rawValue,V2TIMElemType.ELEM_TYPE_VIDEO.rawValue];
+        let downloadKey = msgID! + (isSnapshot ? "_1" : "_0");
+        
+        if(self.downloadingMessageList.contains(downloadKey)){
+            CommonUtils.resultFailed(desc: "The message is downloading", code: -1, call: call, result: result)
+            return;
+        }
         V2TIMManager.sharedInstance().findMessages([msgID!]) { message in
             if(message?.count == 1){
                 let msg:V2TIMMessage = message![0]
                 if(allowList.contains(msg.elemType.rawValue) && msg.msgID == msgID){
+                    
+                    self.downloadingMessageList.append(downloadKey);
                     CommonUtils.resultSuccess(call: call, result: result)
                     if(msg.elemType == V2TIMElemType.ELEM_TYPE_IMAGE){
-                        V2MessageEntity.init(message: msg).downloadImageMessage(msgID!, msg.imageElem, imageType, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path in
-                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path)
+                        V2MessageEntity.init(message: msg).downloadImageMessage(msgID!, msg.imageElem, imageType, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path ,error_code,error_desc in
+                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc)
                         }))
                     }else if(msg.elemType == V2TIMElemType.ELEM_TYPE_VIDEO){
-                        V2MessageEntity.init(message: msg).downloadVideoMessage(msgID!, msg.videoElem, isSnapshot, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path in
-                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path)
+                        V2MessageEntity.init(message: msg).downloadVideoMessage(msgID!, msg.videoElem, isSnapshot, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path,error_code,error_desc in
+                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc)
                         }))
                     }else if(msg.elemType == V2TIMElemType.ELEM_TYPE_SOUND){
-                        V2MessageEntity.init(message: msg).downloadSoundMessage(msgID!, msg.soundElem, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path in
-                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path)
+                        V2MessageEntity.init(message: msg).downloadSoundMessage(msgID!, msg.soundElem, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path,error_code,error_desc in
+                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc)
                         }))
                     }else if(msg.elemType == V2TIMElemType.ELEM_TYPE_FILE){
-                        V2MessageEntity.init(message: msg).downloadFileMessage(msgID!, msg.fileElem, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path in
-                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path)
+                        V2MessageEntity.init(message: msg).downloadFileMessage(msgID!, msg.fileElem, DownloadCallback(onProgress: { isFinish, isError, currentSize, totalSize, msgID, type, isSnapshot, path,error_code,error_desc in
+                            self.sendDownloadProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc)
                         }))
                     }
                 }else{

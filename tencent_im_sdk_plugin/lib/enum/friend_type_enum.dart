@@ -1,13 +1,1 @@
-enum FriendTypeEnum {
-  ///dart站位，不能使用
-  ///
-  V2TIM_NUll,
-
-  ///单向好友
-  ///
-  V2TIM_FRIEND_TYPE_SINGLE,
-
-  ///互为好友
-  ///
-  V2TIM_FRIEND_TYPE_BOTH
-}
+export 'package:tencent_im_sdk_plugin_platform_interface/enum/friend_type_enum.dart';

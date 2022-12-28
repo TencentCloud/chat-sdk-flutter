@@ -69,3 +69,9 @@
 
 ## 0.3.4
 * web bug fixed
+
+## 0.3.7
+* add some models
+
+## 0.3.7
+* bug fix

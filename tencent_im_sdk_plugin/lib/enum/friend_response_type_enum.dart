@@ -1,6 +1,1 @@
-enum FriendResponseTypeEnum {
-  // 同意添加单向好友
-  V2TIM_FRIEND_ACCEPT_AGREE,
-  // 同意并添加为双向好友
-  V2TIM_FRIEND_ACCEPT_AGREE_AND_ADD,
-}
+export 'package:tencent_im_sdk_plugin_platform_interface/enum/friend_response_type_enum.dart';

@@ -17,7 +17,7 @@ import 'package:tencent_im_sdk_plugin_platform_interface/enum/history_message_ge
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSimpleMsgListener.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/offlinePushInfo.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/method_channel_im_flutter.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversationList_filter.dart';
@@ -43,9 +43,9 @@ import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_mes
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_search_param.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_change_info.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_download_progress.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_extension.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_extension_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_list_result.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_online_url.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_receipt.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_param.dart';
@@ -1294,7 +1294,9 @@ abstract class ImFlutterPlatform extends PlatformInterface {
   }
 
   Future<V2TimValueCallback<V2TimMsgCreateInfoResult>> createImageMessage(
-      {required String imagePath, dynamic inputElement}) async {
+      {required String imagePath,
+      dynamic inputElement,
+      String? imageName}) async {
     throw UnimplementedError("createImageMessage() has not been implemented");
   }
 
@@ -1725,6 +1727,19 @@ abstract class ImFlutterPlatform extends PlatformInterface {
   }) async {
     throw UnimplementedError(
         "getHistoryMessageList() has not been implemented");
+  }
+
+  Future<V2TimValueCallback<V2TimMessageListResult>> getHistoryMessageListV2({
+    int getType = HistoryMessageGetType.V2TIM_GET_LOCAL_OLDER_MSG,
+    String? userID,
+    String? groupID,
+    int lastMsgSeq = -1,
+    required int count,
+    String? lastMsgID,
+    List<int>? messageTypeList,
+  }) async {
+    throw UnimplementedError(
+        "getHistoryMessageListV2() has not been implemented");
   }
 
   Future<V2TimValueCallback<V2TimMessage>> sendForwardMessage(

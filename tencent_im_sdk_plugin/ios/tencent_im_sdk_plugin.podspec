@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'tencent_im_sdk_plugin'
-  s.version          = '4.2.0'
+  s.version          = '5.0.4'
   s.summary          = 'Tencent IM SDK For Flutter'
   s.description      = <<-DESC
 Tencent IM SDK For Flutter
@@ -22,10 +22,10 @@ Tencent IM SDK For Flutter
   s.swift_version = '5.0'
 
   # 资源导入
-  s.vendored_frameworks = '**/*.framework'
+  # s.vendored_frameworks = '**/*.framework'
 
   # SDK 依赖
-  s.dependency 'TXIMSDK_Plus_iOS', "6.8.3374"
+  s.dependency 'TXIMSDK_Plus_iOS', "6.9.3557"
   # s.dependency 'TXIMSDK_Smart_iOS'
   # s.dependency 'BrightFutures'
   s.dependency 'HydraAsync'

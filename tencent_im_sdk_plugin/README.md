@@ -130,15 +130,16 @@ In the [IM console](https://console.cloud.tencent.com/im), select your applicati
 ## Part 2. Selecting a Proper Scheme to Integrate the SDK for Flutter
 
 
-Tencent Cloud Chat offers three integration schemes:
+Tencent Cloud Chat offers four integration schemes:
 
 |   | Use Case |
 |---------|---------|
 | Using the demo | Our demo is a complete chat application with open-source code. If you need to implement chat scenarios, you can use the demo for secondary development. Try it out [here](https://www.tencentcloud.com/document/product/1047/34279). |
 | [Using UI library](https://pub.dev/packages/tim_ui_kit) | The Chat UI components library [TUIKit](https://pub.dev/packages/tim_ui_kit) provides common UI components, such as conversation list, chat page, and contact list. You can use those components to build an In-APP chat module to your Flutter APP quickly. **This solution is recommended**. |
 | Self-implementing with this package | Use this solution if [TUIKit](https://pub.dev/packages/tim_ui_kit) cannot meet your needs. |
+| Add to your existing application | Add the Flutter module to your existing app, coding once and deploying to all platforms. It could reduce your workload, to adding chat and call modules to your existing, to a large extent. Referring to [this documentation](https://www.tencentcloud.com/document/product/1047/51456) for details.  |
 
-> To better understand Chat SDK APIs, see API examples [here](https://github.com/TencentCloud/TIMSDK/tree/master/Flutter/IMSDK/im-flutter-plugin/tencent_im_sdk_plugin/example), which shows how to call APIs and trigger listeners.
+> To better understand Chat SDK APIs, see API examples [here](https://github.com/TencentCloud/tc-chat-sdk-flutter/tree/main/example), which shows how to call APIs and trigger listeners.
 
 ## Part 3. Using the Demo
 
@@ -147,10 +148,7 @@ Tencent Cloud Chat offers three integration schemes:
 1. Download the source code and install dependencies:
 ```shell
 # Clone the code
-git clone https://github.com/TencentCloud/TIMSDK.git
-
-# Enter the demo directory of Flutter
-cd TIMSDK/Flutter/Demo/im-flutter-uikit
+git clone https://github.com/TencentCloud/tc-chat-demo-flutter.git
 
 # Install dependencies
 flutter pub get
@@ -275,7 +273,7 @@ If the returned `res.code` is `0`, the login is successful.
 import 'package:tencent_im_sdk_plugin/tencent_im_sdk_plugin.dart';
  V2TimCallback res = await TencentImSDKPlugin.v2TIMManager.login (
     userID: userID,
-    userSig: userSig, 
+    userSig: userSig,
   );
 ```
 
@@ -300,8 +298,8 @@ V2TimValueCallback<V2TimMsgCreateInfoResult> createMessage =
       await TencentImSDKPlugin.v2TIMManager
           .getMessageManager()
           .createTextMessage(text: "The text to create");
-          
-String id = createMessage.data!.id!; // The message creation ID 
+
+String id = createMessage.data!.id!; // The message creation ID
 
 V2TimValueCallback<V2TimMessage> res = await TencentImSDKPlugin.v2TIMManager
       .getMessageManager()
@@ -348,7 +346,7 @@ getConversationList() async {
       .v2TIMManager
       .getConversationManager()
       .getConversationList(nextSeq: nextSeq, count: 10);
-  
+
   nextSeq = res.data?.nextSeq ?? "0";
 }
 ```
@@ -424,9 +422,9 @@ import 'package:tencent_im_sdk_plugin/tencent_im_sdk_plugin.dart';
         count: 20,
         lastMsgID: "",
       );
-      
+
   List<V2TimMessage> msgList = res.data ?? [];
-  
+
   // here you can use msgList to render your message list
     }
 ```

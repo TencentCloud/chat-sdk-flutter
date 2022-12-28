@@ -28,6 +28,10 @@ class LoginState extends State<Login> {
       userID: userID,
       userSig: userSig,
     );
+    await TencentImSDKPlugin.v2TIMManager.callExperimentalAPI(
+      api: "disableBadgeNumber",
+      param: true,
+    );
     setState(() {
       resData = res.toJson();
     });

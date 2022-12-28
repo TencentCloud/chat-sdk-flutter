@@ -360,6 +360,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN2V63AD2J;
 				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Example;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -502,6 +503,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN2V63AD2J;
 				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Example;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -536,6 +538,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FN2V63AD2J;
 				ENABLE_BITCODE = NO;
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Example;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

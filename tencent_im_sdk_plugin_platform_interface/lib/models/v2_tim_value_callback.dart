@@ -20,6 +20,7 @@ import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message.d
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_change_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_extension.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_extension_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_list_result.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_online_url.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_receipt.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_result.dart';
@@ -148,6 +149,8 @@ class V2TimValueCallback<T> {
             json['data']); // V2TimSignalingInfo
       } else if (T == V2TimSignalingInfo) {
         fromJsonData = V2TimSignalingInfo.fromJson(json['data']);
+      } else if (T == V2TimMessageListResult) {
+        fromJsonData = V2TimMessageListResult.fromJson(json['data']);
       } else if (T == V2TimMessageOnlineUrl) {
         fromJsonData = V2TimMessageOnlineUrl.fromJson(json['data']);
       } else if (T == V2TimMessageChangeInfo) {
@@ -203,6 +206,8 @@ class V2TimValueCallback<T> {
     } else {
       if (T == V2TimMessage) {
         toJsonData = (this.data as V2TimMessage).toJson();
+      } else if (T == V2TimMessageListResult) {
+        toJsonData = (this.data as V2TimMessageListResult).toJson();
       } else if (T == V2TimUserFullInfo) {
         toJsonData = (this.data as V2TimUserFullInfo).toJson();
       } else if (T == _getT<List<V2TimUserFullInfo>>()) {

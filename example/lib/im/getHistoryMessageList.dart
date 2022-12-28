@@ -5,7 +5,7 @@ import 'package:example/im/groupSelector.dart';
 import 'package:example/utils/sdkResponse.dart';
 import 'package:tencent_im_sdk_plugin/enum/history_msg_get_type_enum.dart';
 import 'package:tencent_im_sdk_plugin/enum/message_elem_type.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message.dart';
+import 'package:tencent_im_sdk_plugin/models/v2_tim_message_list_result.dart';
 import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
 import 'package:tencent_im_sdk_plugin/tencent_im_sdk_plugin.dart';
 
@@ -23,21 +23,20 @@ class GetHistoryMessageListState extends State<GetHistoryMessageList> {
   List<String> group = List.empty(growable: true);
   HistoryMsgGetTypeEnum type = HistoryMsgGetTypeEnum.V2TIM_GET_LOCAL_OLDER_MSG;
   getHistoryMessageList() async {
-    V2TimValueCallback<List<V2TimMessage>> res = await TencentImSDKPlugin
+    V2TimValueCallback<V2TimMessageListResult> res = await TencentImSDKPlugin
         .v2TIMManager
         .getMessageManager()
-        .getHistoryMessageList(
+        .getHistoryMessageListV2(
             userID: users.isNotEmpty ? users.first : null,
             groupID: group.isNotEmpty ? group.first : null,
-            count: 20,
+            count: 1,
             lastMsgID: lastMsgID,
             getType: type,
-            messageTypeList: [MessageElemType.V2TIM_ELEM_TYPE_CUSTOM]
-            );
+            messageTypeList: [MessageElemType.V2TIM_ELEM_TYPE_CUSTOM]);
     setState(() {
       resData = res.toJson();
-      if (res.data!.isNotEmpty) {
-        lastMsgID = res.data!.last.msgID;
+      if (res.data!.messageList.isNotEmpty) {
+        lastMsgID = res.data!.messageList.last.msgID;
       }
     });
   }
@@ -89,8 +88,8 @@ class GetHistoryMessageListState extends State<GetHistoryMessageList> {
         Container(
           height: 60,
           decoration: const BoxDecoration(
-            border:  Border(
-              bottom:  BorderSide(
+            border: Border(
+              bottom: BorderSide(
                 color: Colors.black45,
               ),
             ),
@@ -108,8 +107,8 @@ class GetHistoryMessageListState extends State<GetHistoryMessageList> {
                         title: const Text('V2TIM_GET_CLOUD_NEWER_MSG'),
                         onPressed: () {
                           setState(() {
-                            type = HistoryMsgGetTypeEnum
-                                .V2TIM_GET_CLOUD_NEWER_MSG;
+                            type =
+                                HistoryMsgGetTypeEnum.V2TIM_GET_CLOUD_NEWER_MSG;
                             lastMsgID = null;
                           });
                           Navigator.pop(context);
@@ -119,8 +118,8 @@ class GetHistoryMessageListState extends State<GetHistoryMessageList> {
                         title: const Text('V2TIM_GET_CLOUD_OLDER_MSG'),
                         onPressed: () {
                           setState(() {
-                            type = HistoryMsgGetTypeEnum
-                                .V2TIM_GET_CLOUD_OLDER_MSG;
+                            type =
+                                HistoryMsgGetTypeEnum.V2TIM_GET_CLOUD_OLDER_MSG;
                             lastMsgID = null;
                           });
                           Navigator.pop(context);
@@ -130,8 +129,8 @@ class GetHistoryMessageListState extends State<GetHistoryMessageList> {
                         title: const Text('V2TIM_GET_LOCAL_OLDER_MSG'),
                         onPressed: () {
                           setState(() {
-                            type = HistoryMsgGetTypeEnum
-                                .V2TIM_GET_LOCAL_OLDER_MSG;
+                            type =
+                                HistoryMsgGetTypeEnum.V2TIM_GET_LOCAL_OLDER_MSG;
                             lastMsgID = null;
                           });
                           Navigator.pop(context);
@@ -141,8 +140,8 @@ class GetHistoryMessageListState extends State<GetHistoryMessageList> {
                         title: const Text('V2TIM_GET_LOCAL_NEWER_MSG'),
                         onPressed: () {
                           setState(() {
-                            type = HistoryMsgGetTypeEnum
-                                .V2TIM_GET_LOCAL_NEWER_MSG;
+                            type =
+                                HistoryMsgGetTypeEnum.V2TIM_GET_LOCAL_NEWER_MSG;
                             lastMsgID = null;
                           });
                           Navigator.pop(context);

@@ -1,9 +1,9 @@
 name: tencent_im_sdk_plugin
 description: Tencent Cloud Chat SDK. Globally interconnected In-App Chat, user profile and relationship chains and offline push.
-version: 4.1.9
+version: 5.0.5
 homepage: https://www.tencentcloud.com/products/im?from=pub
 documentation: https://comm.qq.com/im/doc/flutter/en/SDKAPI/readme.html
-repository: https://github.com/TencentCloud/TIMSDK/tree/master/Flutter/IMSDK/im-flutter-plugin/tencent_im_sdk_plugin
+repository: https://github.com/TencentCloud/tc-chat-sdk-flutter/tree/main/tencent_im_sdk_plugin
 platforms:
   android:
   ios:
@@ -13,7 +13,7 @@ platforms:
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: "^2.0.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:
@@ -21,15 +21,15 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   json_annotation: ^4.0.1
-  # tencent_im_sdk_plugin_platform_interface: 0.3.5
-  tencent_im_sdk_plugin_platform_interface:
-    path: ../tencent_im_sdk_plugin_platform_interface
+  tencent_im_sdk_plugin_platform_interface: ^0.3.10
+  # tencent_im_sdk_plugin_platform_interface:
+  #   path: ../tencent_im_sdk_plugin_platform_interface
   uuid: ^3.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  plugin_platform_interface: any
   json_serializable: ^4.1.0
   # build_runner: ^1.10.3
 
@@ -54,7 +54,7 @@ flutter:
       # macos:
       #   default_package: tencent_im_sdk_plugin_desktop
       # windows:
-      #   default_package: tencent_im_sdk_plugin_desktop 
+      #   default_package: tencent_im_sdk_plugin_desktop
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -3,11 +3,11 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimSignalingListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/offlinePushInfo.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_signaling_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSignalingListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/offlinePushInfo.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_signaling_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_value_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/utils/utils.dart';
 import 'package:uuid/uuid.dart';

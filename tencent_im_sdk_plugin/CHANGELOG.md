@@ -1,3 +1,19 @@
+## 5.0.4
+* update native sdk
+
+## 5.0.3
+* [Incompatible update] Multimedia messages no longer return url by default, and need to be obtained through getMessageOnlineUrl
+* [Partially incompatible update] Multimedia messages will not return localurl by default, and will only return after the message is successfully downloaded through downloadMessage
+* Add onMessageDownloadProgressCallback to advanceMessageListener, which will be triggered when the multimedia message download progress is updated
+* The disableBadgeNumber method is added on the ios side. After calling, the IMSDK is in the background of the application, and the application badge will not be set by default.
+* Optimized the problem of channel instance coverage in multiple flutter engine scenarios
+* The bottom dynamic library download logic is optimized on the PC side
+* Upgrade the underlying SDK to 6.8
+
+## 4.2.0
+* Fix invite api miss offlinepushInfo
+
+
 ## 4.1.9
 * Fix high version jdk conversion problem
 * Support macOS and Windows

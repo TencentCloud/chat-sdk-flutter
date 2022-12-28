@@ -2,16 +2,16 @@
 
 import 'dart:convert';
 
-import 'package:tencent_im_sdk_plugin/enum/V2TimAdvancedMsgListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimConversationListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimFriendshipListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimGroupListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimSDKListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimSignalingListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimSimpleMsgListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/listener_type.dart';
-import 'package:tencent_im_sdk_plugin/enum/log_level_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/message_priority_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimAdvancedMsgListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimConversationListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimFriendshipListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimGroupListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSDKListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSignalingListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSimpleMsgListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/listener_type.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/log_level_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/message_priority_enum.dart';
 import 'package:tencent_im_sdk_plugin/manager/v2_tim_conversation_manager.dart';
 import 'package:tencent_im_sdk_plugin/manager/v2_tim_friendship_manager.dart';
 import 'package:tencent_im_sdk_plugin/manager/v2_tim_group_manager.dart';
@@ -19,24 +19,24 @@ import 'package:tencent_im_sdk_plugin/manager/v2_tim_message_manager.dart';
 import 'package:tencent_im_sdk_plugin/manager/v2_tim_offline_push_manager.dart';
 import 'package:tencent_im_sdk_plugin/manager/v2_tim_signaling_manager.dart';
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_change_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_change_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_change_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_change_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_info.dart';
 
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_conversation.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_application.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_application.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_info.dart';
 
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message_download_progress.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_message_receipt.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_download_progress.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_receipt.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 
-import 'package:tencent_im_sdk_plugin/models/v2_tim_user_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_user_status.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_user_full_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_user_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_user_status.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_value_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_user_full_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_extension.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/utils/const.dart';

@@ -1,6 +1,6 @@
 name: tencent_im_sdk_plugin_platform_interface
 description: tencent_im_sdk_plugin common interface
-version: 0.3.5
+version: 0.3.8+1
 homepage:
 
 environment:

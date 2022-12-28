@@ -3,26 +3,26 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/enum/group_add_opt_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/group_application_type_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/group_member_filter_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/group_member_role_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/group_type.dart';
-import 'package:tencent_im_sdk_plugin/enum/utils.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_application_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_info_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_full_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_info_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_operation_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_search_param.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member_search_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_search_param.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_add_opt_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_application_type_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_member_filter_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_member_role_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_type.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/utils.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_application_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_info_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_full_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_info_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_operation_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_search_param.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_search_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_search_param.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_value_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_group_member.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info_result.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_operation_result.dart';
 
@@ -552,8 +552,10 @@ class V2TIMGroupManager {
     required String groupID,
     required V2TimTopicInfo topicInfo,
   }) async {
-    return ImFlutterPlatform.instance
-        .createTopicInCommunity(groupID: groupID, topicInfo: topicInfo);
+    return ImFlutterPlatform.instance.createTopicInCommunity(
+      groupID: groupID,
+      topicInfo: topicInfo,
+    );
   }
 
   /// 删除话题

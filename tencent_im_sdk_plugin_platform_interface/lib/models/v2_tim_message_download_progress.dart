@@ -11,6 +11,8 @@ class V2TimMessageDownloadProgress {
   late int type;
   late bool isSnapshot;
   late String path;
+  late int errorCode;
+  late String errorDesc;
 
   V2TimMessageDownloadProgress({
     required this.isFinish,
@@ -21,6 +23,8 @@ class V2TimMessageDownloadProgress {
     required this.type,
     required this.isSnapshot,
     required this.path,
+    required this.errorCode,
+    required this.errorDesc,
   });
 
   V2TimMessageDownloadProgress.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,8 @@ class V2TimMessageDownloadProgress {
     type = json["type"];
     isSnapshot = json["isSnapshot"];
     path = json["path"];
+    errorCode = json["errorCode"];
+    errorDesc = json["errorDesc"];
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +50,8 @@ class V2TimMessageDownloadProgress {
     data["type"] = type;
     data["isSnapshot"] = isSnapshot;
     data["path"] = path;
+    data["errorCode"] = errorCode;
+    data["errorDesc"] = errorDesc;
     return data;
   }
 }

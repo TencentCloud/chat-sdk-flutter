@@ -3,19 +3,19 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimFriendshipListener.dart';
-import 'package:tencent_im_sdk_plugin/enum/friend_application_type_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/friend_response_type_enum.dart';
-import 'package:tencent_im_sdk_plugin/enum/friend_type_enum.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_application_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_check_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_group.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_info.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_info_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_operation_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_friend_search_param.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimFriendshipListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/friend_application_type_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/friend_response_type_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/friend_type_enum.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_application_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_check_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_group.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_info_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_operation_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_search_param.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_value_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
 import 'package:uuid/uuid.dart';
 

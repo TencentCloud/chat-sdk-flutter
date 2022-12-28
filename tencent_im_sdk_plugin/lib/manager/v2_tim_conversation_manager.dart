@@ -2,13 +2,13 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/enum/V2TimConversationListener.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_conversation.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_conversationList_filter.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_conversation_operation_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_conversation_result.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_value_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimConversationListener.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversationList_filter.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation_operation_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_value_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
 import 'package:uuid/uuid.dart';
 

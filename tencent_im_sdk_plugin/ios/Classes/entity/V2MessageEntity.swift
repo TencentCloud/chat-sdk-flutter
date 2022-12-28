@@ -76,7 +76,7 @@ public class V2MessageEntity {
             if(image.type.rawValue != imageType){
                 continue;
             }
-            let file_identify = "\(image.size)\(image.width)\(image.height)" ;
+            let file_identify = "image_"+"\(image.size)\(image.width)\(image.height)" ;
             
             let path = NSTemporaryDirectory() + "\(file_identify)_\(image.uuid!)";
             if !fileManager.fileExists(atPath: path) {
@@ -84,17 +84,17 @@ public class V2MessageEntity {
                 image.downloadImage(path, progress: {
                     (curSize, totalSize) -> Void in
                     // print(curSize);
-                    callback.onProgress(false,false,curSize,totalSize, msgID,imageType,false,path);
+                    callback.onProgress(false,false,curSize,totalSize, msgID,imageType,false,path,0,"");
                 }, succ: {
-                    callback.onProgress(true,false,0,0, msgID,imageType,false,path);
+                    callback.onProgress(true,false,0,0, msgID,imageType,false,path,0,"");
                 }, fail: {
                     (code, msg) -> Void in
-                    callback.onProgress(false,true,0,0, msgID,imageType,false,path);
+                    callback.onProgress(false,true,0,0, msgID,imageType,false,path,code,msg);
                     print("下载失败：desc:"+(msg ?? ""))
                 })
 
             } else {
-                callback.onProgress(true,false,0,0, msgID,imageType,false,path);
+                callback.onProgress(true,false,0,0, msgID,imageType,false,path,0,"");
                 // 图片存在，无需处理
             }
         }
@@ -103,24 +103,24 @@ public class V2MessageEntity {
     func downloadFileMessage(_ msgID:String,_ fileElem:V2TIMFileElem,_ callback:DownloadCallback){
         let fileManager = FileManager.default;
         
-        let path = NSTemporaryDirectory() + "\(fileElem.uuid ?? "")";
+        let path = NSTemporaryDirectory() + "file_"+"\(fileElem.uuid ?? "")";
         
            
             if !fileManager.fileExists(atPath: path) {
                         
                 fileElem.downloadFile(path, progress: {
                     (curSize, totalSize) -> Void in
-                    callback.onProgress(false,false,curSize,totalSize, msgID,0,false,path);
+                    callback.onProgress(false,false,curSize,totalSize, msgID,0,false,path,0,"");
                 }, succ: {
-                    callback.onProgress(true,false,0,0, msgID,0,false,path);
+                    callback.onProgress(true,false,0,0, msgID,0,false,path,0,"");
                 }, fail: {
                     (code, msg) -> Void in
-                    callback.onProgress(false,true,0,0, msgID,0,false,path);
+                    callback.onProgress(false,true,0,0, msgID,0,false,path,code,msg);
                     print("下载失败：desc:"+(msg ?? ""))
                 })
 
             } else {
-                callback.onProgress(true,false,0,0, msgID,0,false,path);
+                callback.onProgress(true,false,0,0, msgID,0,false,path,0,"");
                 // 图片存在，无需处理
             }
         
@@ -129,64 +129,64 @@ public class V2MessageEntity {
     func downloadSoundMessage(_ msgID:String,_ soundElem:V2TIMSoundElem,_ callback:DownloadCallback){
         let fileManager = FileManager.default;
         
-        let path = NSTemporaryDirectory() + "\(soundElem.uuid ?? "")";
+        let path = NSTemporaryDirectory()+"sound_"+"\(soundElem.uuid ?? "")";
         
            
             if !fileManager.fileExists(atPath: path) {
                 soundElem.downloadSound(path, progress: {
                                 (curSize, totalSize) -> Void in
-                    callback.onProgress(false,false,curSize,totalSize, msgID,0,false,path);
+                    callback.onProgress(false,false,curSize,totalSize, msgID,0,false,path,0,"");
                             }, succ: {
-                                callback.onProgress(true,false,0,0, msgID,0,false,path);
+                                callback.onProgress(true,false,0,0, msgID,0,false,path,0,"");
                             }, fail: {
                                 (code, msg) -> Void in
-                                callback.onProgress(false,true,0,0, msgID,0,false,path);
+                                callback.onProgress(false,true,0,0, msgID,0,false,path,code,msg);
                                 print("下载失败：desc:"+(msg ?? ""))
                             })
                 
 
             } else {
-                callback.onProgress(true,false,0,0, msgID,0,false,path);
+                callback.onProgress(true,false,0,0, msgID,0,false,path,0,"");
                 // 图片存在，无需处理
             }
         
     }
     func downloadVideoMessage(_ msgID:String,_ videoElem:V2TIMVideoElem,_ issnapshot:Bool,_ callback:DownloadCallback){
         let fileManager = FileManager.default;
-        let pathSnapshot = NSTemporaryDirectory() + "\(videoElem.snapshotUUID ?? "")";
-        let pathVideo = NSTemporaryDirectory() + "\(videoElem.videoUUID ?? "")";
+        let pathSnapshot = NSTemporaryDirectory()+"video_"+"\(videoElem.snapshotUUID ?? "")";
+        let pathVideo = NSTemporaryDirectory()+"video_"+"\(videoElem.videoUUID ?? "")";
         
         
         if(issnapshot){
             if !fileManager.fileExists(atPath: pathSnapshot) {
                 videoElem.downloadSnapshot(pathSnapshot, progress: {
                     (curSize, totalSize) -> Void in
-                    callback.onProgress(false,false,curSize,totalSize, msgID,0,true,pathSnapshot);
+                    callback.onProgress(false,false,curSize,totalSize, msgID,0,true,pathSnapshot,0,"");
                 }, succ: {
-                    callback.onProgress(true,false,0,0, msgID,0,false,pathSnapshot);
+                    callback.onProgress(true,false,0,0, msgID,0,true,pathSnapshot,0,"");
                 }, fail: {
                     (code, msg) -> Void in
-                    callback.onProgress(false,true,0,0, msgID,0,false,pathSnapshot);
+                    callback.onProgress(false,true,0,0, msgID,0,true,pathSnapshot,code,msg);
                                                     print("下载失败：desc:"+(msg ?? ""))
                 })
             } else {
-                callback.onProgress(true,false,0,0, msgID,0,false,pathSnapshot);
+                callback.onProgress(true,false,0,0, msgID,0,true,pathSnapshot,0,"");
             }
         }else{
             
                     if !fileManager.fileExists(atPath: pathVideo) {
                         videoElem.downloadVideo(pathVideo, progress: {
                             (curSize, totalSize) -> Void in
-                            callback.onProgress(false,false,curSize,totalSize, msgID,0,true,pathVideo);
+                            callback.onProgress(false,false,curSize,totalSize, msgID,0,false,pathVideo,0,"");
                         }, succ: {
-                            callback.onProgress(true,false,0,0, msgID,0,false,pathVideo);
+                            callback.onProgress(true,false,0,0, msgID,0,false,pathVideo,0,"");
                         }, fail: {
                             (code, msg) -> Void in
-                            callback.onProgress(false,true,0,0, msgID,0,false,pathVideo);
+                            callback.onProgress(false,true,0,0, msgID,0,false,pathVideo,code,msg);
                                                             print("下载失败：desc:"+(msg ?? ""))
                         })
                     } else {
-                        callback.onProgress(true,false,0,0, msgID,0,false,pathVideo);
+                        callback.onProgress(true,false,0,0, msgID,0,false,pathVideo,0,"");
                     }
         }
         
@@ -307,7 +307,7 @@ public class V2MessageEntity {
         for image in imageElem.imageList! {
             var item: [String: Any] = [:];
             
-            let file_identify = "\(image.size)\(image.width)\(image.height)" ;
+            let file_identify = "image_"+"\(image.size)\(image.width)\(image.height)" ;
             let path = NSTemporaryDirectory() + "\(file_identify)_\(image.uuid!)";
             
             item["uuid"] = image.uuid;
@@ -332,7 +332,7 @@ public class V2MessageEntity {
     func convertSoundMessageElem(soundElem:V2TIMSoundElem) -> [String:Any] {
         
         let fileManager = FileManager.default;
-        let path = NSTemporaryDirectory() + "\(soundElem.uuid ?? "")";
+        let path = NSTemporaryDirectory()+"sound_"+"\(soundElem.uuid ?? "")";
         var item: [String: Any] = [:];
         item["UUID"] = soundElem.uuid as Any;
         item["dataSize"] = soundElem.dataSize;
@@ -350,8 +350,8 @@ public class V2MessageEntity {
     func convertVideoMessageElem(videoElem:V2TIMVideoElem) -> [String:Any] {
         
         let fileManager = FileManager.default;
-        let pathSnapshot = NSTemporaryDirectory() + "\(videoElem.snapshotUUID ?? "")";
-        let pathVideo = NSTemporaryDirectory() + "\(videoElem.videoUUID ?? "")";
+        let pathSnapshot = NSTemporaryDirectory()+"video_"+"\(videoElem.snapshotUUID ?? "")";
+        let pathVideo = NSTemporaryDirectory()+"video_"+"\(videoElem.videoUUID ?? "")";
         var item: [String: Any] = [:];
         item["snapshotUUID"] = videoElem.snapshotUUID as Any;
         item["snapshotPath"] = videoElem.snapshotPath as Any;
@@ -377,7 +377,7 @@ public class V2MessageEntity {
     
     func convertFileElem(fileElem:V2TIMFileElem) -> [String:Any] {
         let fileManager = FileManager.default;
-        let path = NSTemporaryDirectory() + "\(fileElem.uuid ?? "")";
+        let path = NSTemporaryDirectory() + "file_"+"\(fileElem.uuid ?? "")";
         
         var item: [String: Any] = [:];
         item["UUID"] = fileElem.uuid ?? "";

@@ -1,6 +1,4 @@
 import 'dart:html';
-import 'dart:typed_data';
-
 import 'package:tencent_im_sdk_plugin_web/src/enum/message_priority.dart';
 import 'package:tencent_im_sdk_plugin_web/src/models/v2_tim_message.dart';
 import 'package:tencent_im_sdk_plugin_web/src/utils/utils.dart';
@@ -55,12 +53,25 @@ class CreateMessage {
     };
   }
 
-  static createSimpleImageMessage(Node inputElement) {
+  static createFile({required String path, String? name}) async {
+    File? file;
+    await window.fetch(path).then((r) async {
+      Blob blob = await r.blob();
+      file = File([blob], name ?? path.toString(), {'type': blob.type});
+    });
+    return file;
+  }
+
+  static createSimpleImageMessage(Map params) async {
     return {
       "elemType": 3,
       "type": "image",
       "imageElem": {
-        "file": inputElement,
+        "file": params["inputElement"] ??
+            await createFile(
+              path: params["imagePath"],
+              name: params["imageName"],
+            ),
       }
     };
   }
@@ -76,13 +87,13 @@ class CreateMessage {
   static createSimpleVideoMessage(
     String videoFilePath,
     dynamic file,
-  ) {
+  ) async {
     return {
       "elemType": 5,
       "type": "video",
       "videoElem": {
         "videoFilePath": videoFilePath,
-        "file": file,
+        "file": file ?? await createFile(path: videoFilePath),
       }
     };
   }
@@ -175,11 +186,17 @@ class CreateMessage {
   }
 
   static createSimpleFileMessage(
-      {required String filePath, required String fileName, dynamic file}) {
+      {required String filePath,
+      required String fileName,
+      dynamic file}) async {
     return {
       "elemType": 6,
       "type": "file",
-      "fileElem": {"filePath": filePath, "fileName": fileName, "file": file}
+      "fileElem": {
+        "filePath": filePath,
+        "fileName": fileName,
+        "file": file ??= await createFile(path: filePath, name: fileName)
+      }
     };
   }
 

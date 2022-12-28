@@ -414,6 +414,9 @@ public class TencentImSDKPlugin: NSObject, FlutterPlugin, UNUserNotificationCent
 		case "getHistoryMessageList":
 			messageManager!.getHistoryMessageList(call: call, result: result)
 			break
+        case "getHistoryMessageListV2":
+            messageManager!.getHistoryMessageListV2(call: call, result: result)
+            break
 		case "revokeMessage":
 			messageManager!.revokeMessage(call: call, result: result)
 			break

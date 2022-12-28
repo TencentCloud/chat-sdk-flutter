@@ -21,6 +21,8 @@ class SendFileMessage extends StatefulWidget {
   State<StatefulWidget> createState() => SendFileMessageState();
 }
 
+final ImagePicker picker = ImagePicker();
+
 class SendFileMessageState extends State<SendFileMessage> {
   Map<String, dynamic>? resData;
   List<String> receiver = List.empty(growable: true);
@@ -31,7 +33,7 @@ class SendFileMessageState extends State<SendFileMessage> {
   File? image;
   String fileName = '';
   Uint8List? fileContent;
-  final picker = ImagePicker();
+
   sendFileMessage() async {
     html.Node? inputElement;
     if (kIsWeb) {

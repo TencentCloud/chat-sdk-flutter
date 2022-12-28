@@ -10,7 +10,8 @@ import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSDKListener.d
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/get_group_message_read_member_list_filter.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/history_message_get_type.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_list_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversationList_filter.dart';
@@ -706,6 +707,7 @@ class TencentImSDKPluginDesktop extends ImFlutterPlatform {
   Future<V2TimValueCallback<V2TimMsgCreateInfoResult>> createImageMessage({
     required String imagePath,
     dynamic inputElement,
+    String? imageName,
   }) async {
     return IMNative.createImageMessage(imagePath: imagePath);
   }
@@ -864,6 +866,26 @@ class TencentImSDKPluginDesktop extends ImFlutterPlatform {
       lastMsgSeq: lastMsgSeq,
       messageTypeList: messageTypeList,
     );
+  }
+
+  @override
+  Future<V2TimValueCallback<V2TimMessageListResult>> getHistoryMessageListV2({
+    int getType = HistoryMessageGetType.V2TIM_GET_LOCAL_OLDER_MSG,
+    String? userID,
+    String? groupID,
+    int lastMsgSeq = -1,
+    required int count,
+    String? lastMsgID,
+    List<int>? messageTypeList,
+  }) async {
+    return V2TimValueCallback<V2TimMessageListResult>.fromJson({
+      "code": -1,
+      "desc": "desktop is not support this api now",
+      "data": V2TimMessageListResult.fromJson({
+        "isFinished": true,
+        "messageList": List.empty(),
+      }).toJson(),
+    });
   }
 
   @override

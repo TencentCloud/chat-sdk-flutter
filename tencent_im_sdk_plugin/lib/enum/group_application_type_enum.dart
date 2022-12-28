@@ -1,11 +1,1 @@
-///入群申请类型
-///
-///{@category Enums}
-///
-enum GroupApplicationTypeEnum {
-  ///申请入群
-  V2TIM_GROUP_APPLICATION_GET_TYPE_JOIN,
-
-  ///被邀请入群
-  V2TIM_GROUP_APPLICATION_GET_TYPE_INVITE,
-}
+export 'package:tencent_im_sdk_plugin_platform_interface/enum/group_application_type_enum.dart';

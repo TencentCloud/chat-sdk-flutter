@@ -3,7 +3,7 @@ import Hydra
 //  腾讯云工具类
 typealias abSuccess = () -> Void
 typealias abError = (_ code:Int32?,_ desc:String?) -> Void
-typealias OnProgress = (_ isFinish:Bool, _ isError:Bool, _ currentSize:Int, _ totalSize:Int,  _ msgID:String,_ type:Int,_ isSnapshot:Bool,_ path:String) -> Void
+typealias OnProgress = (_ isFinish:Bool, _ isError:Bool, _ currentSize:Int, _ totalSize:Int,  _ msgID:String,_ type:Int,_ isSnapshot:Bool,_ path:String,_ error_code:Int32,_ error_desc:String?) -> Void
 class AbCallback {
     var success:abSuccess;
     var error:abError;

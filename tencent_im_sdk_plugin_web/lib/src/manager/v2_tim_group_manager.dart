@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:js/js_util.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_application_result.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_info.dart';

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:tencent_im_sdk_plugin/models/v2_tim_callback.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/utils/utils.dart';
 
 /// 提供离线推送相关的接口

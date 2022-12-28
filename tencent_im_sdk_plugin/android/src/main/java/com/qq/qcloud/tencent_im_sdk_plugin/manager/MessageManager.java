@@ -38,7 +38,7 @@ public class MessageManager {
     private static HashMap<String,V2TIMMessage> messageIDMap = new HashMap(); // Used to temporarily store the created message
     private static LinkedList<String> listenerUuidList = new LinkedList<String>();
     private static  HashMap<String, V2TIMAdvancedMsgListener> advancedMessageListenerList= new HashMap();
-
+    private static List<String> downloadingMessageList = new LinkedList<>();
     public static void cleanChannels(){
         channels = new LinkedList<>();
     }
@@ -131,7 +131,12 @@ public class MessageManager {
             }
         });
     }
-    public void sendProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID,int type,boolean isSnapshot,String path){
+    public void sendProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID,int type,boolean isSnapshot,String path,int error_code,String error_desc){
+        final String downloadKey = msgID + (isSnapshot?"_1":"_0");
+
+        if(isFinish){
+            downloadingMessageList.remove(downloadKey);
+        }
         for (String listenerUuid : listenerUuidList) {
             HashMap<String,Object> res = new HashMap<>();
             res.put("isFinish",isFinish);
@@ -142,6 +147,8 @@ public class MessageManager {
             res.put("type",type);
             res.put("isSnapshot",isSnapshot);
             res.put("path",path);
+            res.put("errorCode",error_code);
+            res.put("errorDesc",error_desc);
             makeAddAdvancedMsgListenerEventData("onMessageDownloadProgressCallback",res, listenerUuid);
         }
     }
@@ -156,6 +163,13 @@ public class MessageManager {
         needList.add(V2TIMMessage.V2TIM_ELEM_TYPE_SOUND);
         needList.add(V2TIMMessage.V2TIM_ELEM_TYPE_VIDEO);
         needList.add(V2TIMMessage.V2TIM_ELEM_TYPE_FILE);
+
+        final String downloadKey = msgID + (isSnapshot?"_1":"_0");
+
+        if(downloadingMessageList.contains(downloadKey)){
+            CommonUtil.returnError(result,-1,"The message is downloading");
+            return;
+        }
         V2TIMManager.getMessageManager().findMessages(msgIDList, new V2TIMValueCallback<List<V2TIMMessage>>() {
             @Override
             public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
@@ -163,34 +177,35 @@ public class MessageManager {
                     V2TIMMessage msgInstance = v2TIMMessages.get(0);
                     HashMap<String,HashMap<String,Object>> res = new HashMap<>();
                     if(msgInstance.getMsgID().equals(msgID) && needList.contains(msgInstance.getElemType())){
+                        downloadingMessageList.add(downloadKey);
                         CommonUtil.returnSuccess(result,res);
 
                         if(msgInstance.getElemType() == V2TIMMessage.V2TIM_ELEM_TYPE_IMAGE){
                             CommonUtil.downloadImageMessage(msgID, msgInstance.getImageElem(), imageType,new DownloadCallback() {
                                 @Override
-                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID,int type,boolean isSnapshot,String path) {
-                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path);
+                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID,int type,boolean isSnapshot,String path,int error_code,String error_desc) {
+                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc);
                                 }
                             });
                         }else if(msgInstance.getElemType() == V2TIMMessage.V2TIM_ELEM_TYPE_SOUND){
                             CommonUtil.downloadDoundMessage(msgID, msgInstance.getSoundElem(), new DownloadCallback() {
                                 @Override
-                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID, int type, boolean isSnapshot, String path) {
-                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path);
+                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID, int type, boolean isSnapshot, String path,int error_code,String error_desc) {
+                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc);
                                 }
                             });
                         }else if(msgInstance.getElemType() == V2TIMMessage.V2TIM_ELEM_TYPE_VIDEO){
                             CommonUtil.downloadVideoMessage(msgID, msgInstance.getVideoElem(), isSnapshot, new DownloadCallback() {
                                 @Override
-                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID, int type, boolean isSnapshot, String path) {
-                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path);
+                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID, int type, boolean isSnapshot, String path,int error_code,String error_desc) {
+                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc);
                                 }
                             });
                         }else if(msgInstance.getElemType() == V2TIMMessage.V2TIM_ELEM_TYPE_FILE){
                             CommonUtil.downloadFileMessage(msgID, msgInstance.getFileElem(), new DownloadCallback() {
                                 @Override
-                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID, int type, boolean isSnapshot, String path) {
-                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path);
+                                public void onProgress(boolean isFinish, boolean isError, long currentSize, long totalSize, String msgID, int type, boolean isSnapshot, String path,int error_code,String error_desc) {
+                                    sendProgress(isFinish,isError,currentSize,totalSize,msgID,type,isSnapshot,path,error_code,error_desc);
                                 }
                             });
                         }
@@ -1922,6 +1937,90 @@ public class MessageManager {
                         msgs.add(CommonUtil.convertV2TIMMessageToMap(v2TIMMessages.get(i)));
                     }
                     CommonUtil.returnSuccess(result,msgs);
+                }
+
+                @Override
+                public void onError(int code, String desc) {
+                    CommonUtil.returnError(result,code,desc);
+                }
+            });
+        }
+    }
+    public void getHistoryMessageListV2(MethodCall methodCall, final MethodChannel.Result result){
+        int getType = CommonUtil.getParam(methodCall,result,"getType");
+        String userID = CommonUtil.getParam(methodCall,result,"userID");
+        String groupID = CommonUtil.getParam(methodCall,result,"groupID");
+        final String lastMsgID = CommonUtil.getParam(methodCall,result,"lastMsgID");
+        int lastMsgSeq = CommonUtil.getParam(methodCall, result, "lastMsgSeq");
+        int count  = CommonUtil.getParam(methodCall,result,"count");
+
+
+        final V2TIMMessageListGetOption option = new V2TIMMessageListGetOption();
+        option.setCount(count);
+        option.setGetType(getType);
+        if(groupID!=null){
+            option.setGroupID(groupID);
+        }
+        if(userID!=null){
+            option.setUserID(userID);
+        }
+        if (lastMsgSeq != -1) {
+            option.setLastMsgSeq(lastMsgSeq);
+        }
+        if(CommonUtil.getParam(methodCall,result,"messageTypeList")!=null){
+            List<Integer> messageTypeList = CommonUtil.getParam(methodCall,result,"messageTypeList");
+            option.setMessageTypeList(messageTypeList);
+        }
+        List<String> msglist =new  LinkedList<String>();
+        if(lastMsgID!=null){
+            msglist.add(lastMsgID);
+            V2TIMManager.getMessageManager().findMessages(msglist, new V2TIMValueCallback<List<V2TIMMessage>>() {
+                @Override
+                public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
+                    if(v2TIMMessages.size() == 1){
+                        // found message
+                        option.setLastMsg(v2TIMMessages.get(0));
+                        V2TIMManager.getMessageManager().getHistoryMessageList(option, new V2TIMValueCallback<List<V2TIMMessage>>() {
+                            @Override
+                            public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
+                                LinkedList<HashMap<String,Object>> msgs =new  LinkedList<HashMap<String,Object>>();
+                                for(int i = 0;i<v2TIMMessages.size();i++){
+                                    HashMap<String,Object> msg = CommonUtil.convertV2TIMMessageToMap(v2TIMMessages.get(i));
+                                    msgs.add(msg);
+                                }
+                                HashMap<String,Object> res = new HashMap<>();
+                                res.put("isFinished",v2TIMMessages.size() < option.getCount());
+                                res.put("messageList",msgs);
+                                CommonUtil.returnSuccess(result, res);
+                            }
+
+                            @Override
+                            public void onError(int code, String desc) {
+                                CommonUtil.returnError(result,code,desc);
+                            }
+                        });
+                    }else{
+                        CommonUtil.returnError(result,-1,"message not found");
+                    }
+                }
+
+                @Override
+                public void onError(int code, String desc) {
+                    CommonUtil.returnError(result,code,desc);
+                }
+            });
+        }else{
+            V2TIMManager.getMessageManager().getHistoryMessageList(option, new V2TIMValueCallback<List<V2TIMMessage>>() {
+                @Override
+                public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
+                    List<HashMap<String,Object>> msgs =new  LinkedList<HashMap<String,Object>>();
+                    for(int i = 0;i<v2TIMMessages.size();i++){
+                        msgs.add(CommonUtil.convertV2TIMMessageToMap(v2TIMMessages.get(i)));
+                    }
+                    HashMap<String,Object> res = new HashMap<>();
+                    res.put("isFinished",v2TIMMessages.size() < option.getCount());
+                    res.put("messageList",msgs);
+                    CommonUtil.returnSuccess(result,res);
                 }
 
                 @Override

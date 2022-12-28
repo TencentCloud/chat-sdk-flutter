@@ -59,12 +59,12 @@ PODS:
     - SDWebImage/Core (= 5.14.2)
   - SDWebImage/Core (5.14.2)
   - SwiftyGif (5.4.3)
-  - tencent_im_sdk_plugin (4.2.0):
+  - tencent_im_sdk_plugin (5.0.4):
     - Flutter
     - HydraAsync
-    - TXIMSDK_Plus_iOS (= 6.8.3374)
+    - TXIMSDK_Plus_iOS (= 6.9.3557)
   - Toast (4.0.0)
-  - TXIMSDK_Plus_iOS (6.8.3374)
+  - TXIMSDK_Plus_iOS (6.9.3557)
   - video_thumbnail (0.0.1):
     - Flutter
     - libwebp
@@ -125,11 +125,11 @@ SPEC CHECKSUMS:
   record: cae05d8dd3cdb1dea3511b20e5a5811a1ae00d0d
   SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
-  tencent_im_sdk_plugin: 865e36e77b51a9a4c92b6087f61d3bf4bfd8e990
+  tencent_im_sdk_plugin: 8d92105d410cfccb47e3f2c176c65a843cdefdcf
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  TXIMSDK_Plus_iOS: f04fb957e7019f895131b05d37bc555328f5e239
+  TXIMSDK_Plus_iOS: 1fa1c9e736c7c0fc3feb4f07c073427f01e00824
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
 
-PODFILE CHECKSUM: 6c6a4f92374425c588b5197e2b269f46700bb815
+PODFILE CHECKSUM: c49ad934af5d48cbb5529630d754aa609b245627
 
 COCOAPODS: 1.11.3

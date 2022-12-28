@@ -279,7 +279,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+3"
+    version: "0.8.6"
   image_picker_android:
     dependency: transitive
     description:
@@ -300,14 +300,14 @@ packages:
       name: image_picker_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5+6"
+    version: "0.8.6+1"
   image_picker_platform_interface:
     dependency: transitive
     description:
       name: image_picker_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.2"
   intl:
     dependency: transitive
     description:
@@ -592,21 +592,28 @@ packages:
       path: "../tencent_im_sdk_plugin"
       relative: true
     source: path
-    version: "4.1.9"
+    version: "5.0.4"
   tencent_im_sdk_plugin_desktop:
     dependency: "direct main"
     description:
       path: "../tencent_im_sdk_plugin_desktop"
       relative: true
     source: path
-    version: "0.0.6"
+    version: "0.0.8"
   tencent_im_sdk_plugin_platform_interface:
     dependency: transitive
     description:
       path: "../tencent_im_sdk_plugin_platform_interface"
       relative: true
     source: path
-    version: "0.3.5"
+    version: "0.3.8+1"
+  tencent_im_sdk_plugin_web:
+    dependency: "direct main"
+    description:
+      path: "../tencent_im_sdk_plugin_web"
+      relative: true
+    source: path
+    version: "0.3.6"
   term_glyph:
     dependency: transitive
     description:

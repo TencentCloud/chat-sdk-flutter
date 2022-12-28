@@ -23,7 +23,7 @@ import 'package:tencent_im_sdk_plugin_platform_interface/enum/history_message_ge
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSimpleMsgListener.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/offlinePushInfo.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/im_flutter_plugin_platform_interface.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation_result.dart';
@@ -47,6 +47,8 @@ import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_mes
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_search_param.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_change_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_list_result.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_online_url.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_receipt.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_param.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_message_search_result.dart';
@@ -867,12 +869,14 @@ class TencentImSDKPluginWeb extends ImFlutterPlatform {
   @override
   Future<V2TimValueCallback<V2TimMsgCreateInfoResult>> createImageMessage({
     required String imagePath,
-    String? fileName,
+    String? imageName,
     Uint8List? fileContent,
     dynamic inputElement,
   }) async {
     return _v2timMessageManager.createImageMessage({
       "inputElement": inputElement,
+      "imagePath": imagePath,
+      "imageName": imageName,
     });
   }
 
@@ -1330,6 +1334,26 @@ class TencentImSDKPluginWeb extends ImFlutterPlatform {
   }
 
   @override
+  Future<V2TimValueCallback<V2TimMessageListResult>> getHistoryMessageListV2({
+    int getType = HistoryMessageGetType.V2TIM_GET_LOCAL_OLDER_MSG,
+    String? userID,
+    String? groupID,
+    int lastMsgSeq = -1,
+    required int count,
+    List<int>? messageTypeList, // web暂不处理
+    String? lastMsgID,
+  }) async {
+    return await _v2timMessageManager.getC2CHistoryMessageListV2({
+      "getType": getType,
+      "userID": userID,
+      "groupID": groupID,
+      "lastMsgSeq": lastMsgSeq,
+      "count": count,
+      "lastMsgID": lastMsgID,
+    });
+  }
+
+  @override
   Future<V2TimValueCallback<V2TimMessage>> sendForwardMessage(
       {required String msgID,
       required String receiver,
@@ -1652,5 +1676,22 @@ class TencentImSDKPluginWeb extends ImFlutterPlatform {
   }) {
     return _v2timMessageManager.getGroupMessageReadMemberList(
         filter: filter, messageID: messageID, nextSeq: nextSeq, count: count);
+  }
+
+  @override
+  Future<V2TimValueCallback<V2TimMessageOnlineUrl>> getMessageOnlineUrl({
+    required String msgID,
+  }) async {
+    return V2TimValueCallback<V2TimMessageOnlineUrl>.fromJson({});
+  }
+
+  @override
+  Future<V2TimCallback> downloadMessage({
+    required String msgID,
+    required int messageType,
+    required int imageType, // 图片类型，仅messageType为图片消息是有效
+    required bool isSnapshot, // 是否是视频封面，仅messageType为视频消息是有效
+  }) async {
+    return V2TimCallback.fromJson({});
   }
 }

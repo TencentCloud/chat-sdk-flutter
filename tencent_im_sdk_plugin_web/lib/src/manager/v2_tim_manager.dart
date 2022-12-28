@@ -6,7 +6,7 @@ import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSDKListener.d
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/V2TimSimpleMsgListener.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_change_info_type.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/enum/group_tips_elem_type.dart';
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_callback.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_change_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_group_member_change_info.dart';

@@ -419,28 +419,28 @@ public class CommonUtil {
             }
             try{
                 if(cacheDir.exists()){
-                    final String path =  cacheDir.getPath()+"/"+imgInstance.getType()+""+imgInstance.getSize()+""+imgInstance.getWidth()+imgInstance.getHeight()+"_"+imgInstance.getUUID();
+                    final String path =  cacheDir.getPath()+"/image_"+imgInstance.getType()+""+imgInstance.getSize()+""+imgInstance.getWidth()+imgInstance.getHeight()+"_"+imgInstance.getUUID();
                     File file = new File(path);
                     if(!file.exists()){
                         imgInstance.downloadImage(path, new V2TIMDownloadCallback() {
                             @Override
                             public void onProgress(V2TIMElem.V2ProgressInfo v2ProgressInfo) {
-                                callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,imgInstance.getType(),false,path);
+                                callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,imgInstance.getType(),false,path,0,"");
                             }
 
                             @Override
                             public void onSuccess() {
-                                callback.onProgress(true,false,0,0,msgID,imgInstance.getType(),false,path);
+                                callback.onProgress(true,false,0,0,msgID,imgInstance.getType(),false,path,0,"");
                             }
 
                             @Override
                             public void onError(int i, String s) {
                                 System.out.println("下载失败:"+i+","+s);
-                                callback.onProgress(false,false,0,0,msgID,imgInstance.getType(),false,path);
+                                callback.onProgress(false,false,0,0,msgID,imgInstance.getType(),false,path,i,s);
                             }
                         });
                     }else{
-                        callback.onProgress(true,false,0,0,msgID,imgInstance.getType(),false,path);
+                        callback.onProgress(true,false,0,0,msgID,imgInstance.getType(),false,path,0,"");
                     }
                 }
             }catch (Exception err){
@@ -454,28 +454,28 @@ public class CommonUtil {
             File cacheDir = context.getExternalCacheDir();
 
             if (cacheDir.exists()) {
-                final String path = cacheDir.getPath() + "/" + elem.getUUID();
+                final String path = cacheDir.getPath() + "/file_"+ elem.getUUID();
                 File f = new File(path);
                 if(!f.exists()){
                     elem.downloadFile(path, new V2TIMDownloadCallback() {
                         @Override
                         public void onProgress(V2TIMElem.V2ProgressInfo v2ProgressInfo) {
-                            callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path);
+                            callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path,0,"");
                         }
 
                         @Override
                         public void onSuccess() {
-                            callback.onProgress(true,false,0,0,msgID,0,false,path);
+                            callback.onProgress(true,false,0,0,msgID,0,false,path,0,"");
                         }
 
                         @Override
                         public void onError(int i, String s) {
                             System.out.println("下载失败:"+i+","+s);
-                            callback.onProgress(false,true,0,0,msgID,0,false,path);
+                            callback.onProgress(false,true,0,0,msgID,0,false,path,i,s);
                         }
                     });
                 }else{
-                    callback.onProgress(true,false,0,0,msgID,0,false,path);
+                    callback.onProgress(true,false,0,0,msgID,0,false,path,0,"");
                 }
             }
         }catch (Exception errr){
@@ -487,28 +487,28 @@ public class CommonUtil {
             File cacheDir = context.getExternalCacheDir();
 
             if (cacheDir.exists()) {
-                final String path = cacheDir.getPath() + "/" + elem.getUUID();
+                final String path = cacheDir.getPath() + "/sound_"+ elem.getUUID();
                 File file = new File(path);
                 if(!file.exists()){
                     elem.downloadSound(path, new V2TIMDownloadCallback() {
                         @Override
                         public void onProgress(V2TIMElem.V2ProgressInfo v2ProgressInfo) {
-                            callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path);
+                            callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path,0,"");
                         }
 
                         @Override
                         public void onSuccess() {
-                            callback.onProgress(true,false,0,0,msgID,0,false,path);
+                            callback.onProgress(true,false,0,0,msgID,0,false,path,0,"");
                         }
 
                         @Override
                         public void onError(int i, String s) {
                             System.out.println("下载失败:"+i+","+s);
-                            callback.onProgress(false,true,0,0,msgID,0,false,path);
+                            callback.onProgress(false,true,0,0,msgID,0,false,path,i,s);
                         }
                     });
                 }else{
-                    callback.onProgress(true,false,0,0,msgID,0,false,path);
+                    callback.onProgress(true,false,0,0,msgID,0,false,path,0,"");
                 }
             }
         }catch (Exception errr){
@@ -520,8 +520,8 @@ public class CommonUtil {
             File cacheDir = context.getExternalCacheDir();
 
             if (cacheDir.exists()) {
-                final String path = cacheDir.getPath() + "/" + elem.getVideoUUID();
-                final String snipPath = cacheDir.getPath() + "/" + elem.getSnapshotUUID();
+                final String path = cacheDir.getPath() + "/video_"+ elem.getVideoUUID();
+                final String snipPath = cacheDir.getPath() + "/video_" + elem.getSnapshotUUID();
                 File file = new File(path);
                 File snip = new File(snipPath);
                 if(!isSnapshot){
@@ -529,18 +529,18 @@ public class CommonUtil {
                         elem.downloadVideo(path, new V2TIMDownloadCallback() {
                             @Override
                             public void onProgress(V2TIMElem.V2ProgressInfo v2ProgressInfo) {
-                                callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path);
+                                callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path,0,"");
                             }
 
                             @Override
                             public void onSuccess() {
-                                callback.onProgress(true,false,0,0,msgID,0,false,path);
+                                callback.onProgress(true,false,0,0,msgID,0,false,path,0,"");
                             }
 
                             @Override
                             public void onError(int i, String s) {
                                 System.out.println("下载失败:"+i+","+s);
-                                callback.onProgress(false,true,0,0,msgID,0,false,path);
+                                callback.onProgress(false,true,0,0,msgID,0,false,path,i,s);
                             }
                         });
                     }else{
@@ -550,18 +550,18 @@ public class CommonUtil {
                         elem.downloadSnapshot(snipPath, new V2TIMDownloadCallback() {
                             @Override
                             public void onProgress(V2TIMElem.V2ProgressInfo v2ProgressInfo) {
-                                callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,false,path);
+                                callback.onProgress(false,false,v2ProgressInfo.getCurrentSize(),v2ProgressInfo.getTotalSize(),msgID,0,true,path,0,"");
                             }
 
                             @Override
                             public void onSuccess() {
-                                callback.onProgress(true,false,0,0,msgID,0,false,path);
+                                callback.onProgress(true,false,0,0,msgID,0,true,path,0,"");
                             }
 
                             @Override
                             public void onError(int i, String s) {
                                 System.out.println("下载失败:"+i+","+s);
-                                callback.onProgress(false,true,0,0,msgID,0,false,path);
+                                callback.onProgress(false,true,0,0,msgID,0,true,path,i,s);
                             }
                         });
                     }else{
@@ -589,7 +589,7 @@ public class CommonUtil {
             try {
                 File cacheDir =  context.getExternalCacheDir();
                 if(cacheDir.exists()){
-                    String path =  cacheDir.getPath()+"/"+imgInstance.getType()+""+imgInstance.getSize()+""+imgInstance.getWidth()+imgInstance.getHeight()+"_"+imgInstance.getUUID();
+                    String path =  cacheDir.getPath()+"/image_"+imgInstance.getType()+""+imgInstance.getSize()+""+imgInstance.getWidth()+imgInstance.getHeight()+"_"+imgInstance.getUUID();
                     File file = new File(path);
                     if(file.exists()){
                         item.put("localUrl",path);
@@ -624,7 +624,7 @@ public class CommonUtil {
         try {
             File cacheDir = context.getExternalCacheDir();
             if (cacheDir.exists()) {
-                String path = cacheDir.getPath() + "/" + soundElem.getUUID();
+                String path = cacheDir.getPath() + "/sound_" + soundElem.getUUID();
                 File file = new File(path);
                 if(file.exists()){
                     sound.put("localUrl",path);
@@ -674,8 +674,8 @@ public class CommonUtil {
         try {
             File cacheDir = context.getExternalCacheDir();
             if (cacheDir.exists()) {
-                String path = cacheDir.getPath() + "/" + videoElem.getVideoUUID();
-                String snipPath = cacheDir.getPath() + "/" + videoElem.getSnapshotUUID();
+                String path = cacheDir.getPath() + "/video_" + videoElem.getVideoUUID();
+                String snipPath = cacheDir.getPath() + "/video_" + videoElem.getSnapshotUUID();
                 File file = new File(path);
                 File snip = new File(snipPath);
                 if (file.exists()) {
@@ -712,7 +712,7 @@ public class CommonUtil {
         try {
             File cacheDir = context.getExternalCacheDir();
             if (cacheDir.exists()) {
-                String path = cacheDir.getPath() + "/" + fileElem.getUUID();
+                String path = cacheDir.getPath() + "/file_" + fileElem.getUUID();
                 File f = new File(path);
                 if(f.exists()){
                     file.put("localUrl",path);

@@ -1,4 +1,4 @@
-import 'package:tencent_im_sdk_plugin_platform_interface/models/V2_tim_topic_info.dart';
+import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_topic_info.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_conversation.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_application.dart';
 import 'package:tencent_im_sdk_plugin_platform_interface/models/v2_tim_friend_info.dart';

@@ -1,6 +1,6 @@
 name: tencent_im_sdk_plugin_desktop
 description: tencent im for flutter desktop.
-version: 0.0.6
+version: 0.0.9
 homepage: https://cloud.tencent.com/product/im
 
 environment:
@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # tencent_im_sdk_plugin_platform_interface: ^0.3.6
-  tencent_im_sdk_plugin_platform_interface:
-    path: ../tencent_im_sdk_plugin_platform_interface
+  tencent_im_sdk_plugin_platform_interface: ^0.3.10
+  # tencent_im_sdk_plugin_platform_interface:
+  #   path: ../tencent_im_sdk_plugin_platform_interface
   path: ^1.8.1
   ffi: ^1.2.1
   system_info2: ^2.0.4
